@@ -9,8 +9,8 @@
 
 using namespace miniRT;
 
-static int dx = 320;
-static int dy = 200;
+static int dx = 640;
+static int dy = 480;
 const float MOVE_SPEED = 0.05f;
 const float ROTATE_FACT = 0.02f;
 vector3 delta;

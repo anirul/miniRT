@@ -7,7 +7,6 @@
 
 #include <SDL.h>
 #include <SDL_events.h>
-#include <malloc.h>
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>

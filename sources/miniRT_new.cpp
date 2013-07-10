@@ -6,8 +6,6 @@
 /////////////////////////////////////////////////////////////////////
 
 #include "miniRT_new.h"
-#include <stdio.h>
-#include <malloc.h>
 
 void* operator new (size_t nbrByte) {
 #ifdef _DEBUG

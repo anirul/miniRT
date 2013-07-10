@@ -5,6 +5,8 @@
 // e-mail	: angel@calodox.org
 /////////////////////////////////////////////////////////////////////
 
+#include <stdlib.h>
+
 #ifndef __MINIRT_NEW_HEADER__
 #define __MINIRT_NEW_HEADER__
 

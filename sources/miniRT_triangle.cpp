@@ -98,7 +98,7 @@ namespace miniRT {
 		det = pvd.w;
 
 		if (det > epsilon) return false;
-		tvec = o - pvb->get_pos(v0);
+		tvec = o - vector3(pvb->get_pos(v0));
 		u = tvec * pv;
 		if (u < -epsilon || u > det) return false;
 		qvec = tvec % ((vector3)pvb->get_pos(v1) - 
@@ -178,7 +178,7 @@ namespace miniRT {
 		det = pvd.w;
 		assert(det > epsilon);
 
-		tvec = o - pvb->get_pos(v0);
+		tvec = o - vector3(pvb->get_pos(v0));
 		tuv->y = tvec * pv;
 		if (tuv->y < -epsilon || tuv->y > det) 
 			return false;
