@@ -9,7 +9,11 @@
 #ifndef __MINIRT_TRIANGLE_DEFINED__
 #define __MINIRT_TRIANGLE_DEFINED__
 
+#include "miniRT_math.h"
+
 namespace miniRT {
+    
+class vertex_buffer;
 
 class triangle {
   vertex_buffer* pvb;

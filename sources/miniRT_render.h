@@ -8,7 +8,16 @@
 #ifndef __MINIRT_RENDER_DEFINED__
 #define __MINIRT_RENDER_DEFINED__
 
+#include "miniRT_cam.h"
+
 namespace miniRT {
+
+class window;
+class vertex_buffer;
+class index_buffer;
+class triangle;
+class light;
+template <typename T> class screen_buffer;
 
 class render {
   window* pw;

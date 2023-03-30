@@ -8,6 +8,9 @@
 #ifndef __MINIRT_VERTEXBUFFER_HEADER__
 #define __MINIRT_VERTEXBUFFER_HEADER__
 
+#include "miniRT_math.h"
+#include "miniRT_vertex.h"
+
 namespace miniRT {
 
 class vertex_buffer {
