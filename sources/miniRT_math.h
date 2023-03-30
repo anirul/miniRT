@@ -29,10 +29,11 @@
 #include <assert.h>
 #include <string.h>
 
-#define epsilon 1e-5f
-#define huge 3.402823466E+38f
+#define minirt_epsilon 1e-5f
+#define minirt_huge 3.402823466E+38f
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <cmath>
 
 
 #ifndef WIN32
@@ -1235,7 +1236,7 @@ namespace miniRT {
 		t = sqrt(t);
 		return (*(float *)&t);
 #else
-		return sqrt(x*x + y*y + z*z);
+		return std::sqrt(x*x + y*y + z*z);
 #endif // _M_IX86
 	}
 

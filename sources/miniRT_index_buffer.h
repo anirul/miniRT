@@ -7,15 +7,16 @@
 
 namespace miniRT {
 
-	class index_buffer {
-		int* pi;
-		int nb;
-	public :
-		index_buffer(const int* ib, int l);
-		~index_buffer();
-		int& operator[](int i);
-		int get(int i) const;
-		int size() const { return nb; }
-	};
+class index_buffer {
+  int* pi;
+  int nb;
 
-} // end namespace miniRT
+ public:
+  index_buffer(const int* ib, int l);
+  ~index_buffer();
+  int& operator[](int i);
+  int get(int i) const;
+  int size() const { return nb; }
+};
+
+}  // end namespace miniRT

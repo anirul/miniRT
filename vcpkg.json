@@ -1,0 +1,11 @@
+{
+  "name": "minirt",
+  "version-string": "0.1-alpha",
+  "homepage": "https://github.com/anirul/minirt",
+  "description": "Mini real-time raytracer",
+  "dependencies": [
+    "glew",
+    "opengl",
+    "sdl2"
+  ]
+}
