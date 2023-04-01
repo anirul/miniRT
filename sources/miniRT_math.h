@@ -114,7 +114,7 @@ namespace miniRT {
 		// Constructors and convertions:
 
 		matrix() {}
-		matrix(const matrix& m) : 
+		constexpr matrix(const matrix& m) : 
 			_L1(m._L1), _L2(m._L2), _L3(m._L3), _L4(m._L4) {}
 		matrix(
 			float _11, float _12, float _13, float _14,
@@ -208,7 +208,7 @@ namespace miniRT {
 		// Constructors and convertions:
 
 		vector() {}
-		vector(const vector& v) : vec(v.vec) {}
+		constexpr vector(const vector& v) : vec(v.vec) {}
 		explicit vector(const __m128 &m) : vec(m) {}
 #ifdef _M_IX86
 		explicit vector(const F32vec4 &m) : vec(m) {}
@@ -219,7 +219,7 @@ namespace miniRT {
 #else
 			: x(a), y(a), z(a), w(a) {}
 #endif // _M_IX86
-		vector(
+		constexpr vector(
 			const float x, 
 			const float y, 
 			const float z, const float w=1.0f) 
@@ -239,14 +239,14 @@ namespace miniRT {
 		operator F32vec4() const { return vec; }
 #endif // _M_IX86
 
-		vector& operator = (const vector& a) 
+		constexpr vector& operator = (const vector& a) 
 			{ vec = a.vec; return *this; }
 		vector& operator = (const vector3&);
 #ifdef _M_IX86
 		vector& operator = (const F32vec4 &a) 
 			{ vec = a; return *this; }
 #endif // _M_IX86
-		vector& operator = (const __m128 &a) 
+		constexpr vector& operator = (const __m128 &a) 
 			{ vec = a; return *this; }
 
 		// Accessing elements
@@ -310,25 +310,25 @@ namespace miniRT {
 
 		// Constructors and convertions:
 
-		vector3() {}
-		vector3(const vector3& v) : vec(v.vec) {}
-		explicit vector3(const __m128 &m) : vec(m) {}
+		vector3() = default;
+		constexpr vector3(const vector3& v) : vec(v.vec) {}
+		constexpr explicit vector3(const __m128 &m) : vec(m) {}
 #ifdef _M_IX86
 		explicit vector3(const F32vec4 &m) : vec(m) {}
 #endif // _M_IX86
-		explicit vector3(const float a) 
+		constexpr explicit vector3(const float a) 
 #ifdef _M_IX86
 			: vec(F32vec4(a)) {}
 #else
 			: x(a), y(a), z(a) {}
 #endif // _M_IX86
-		vector3(const float x, const float y, const float z) 
+		constexpr vector3(const float x, const float y, const float z) 
 #ifdef _M_IX86
 			: vec(F32vec4(0.0f,z,y,x)) {}
 #else
 			: x(x), y(y), z(z) {}
 #endif // _M_IX86
-		explicit vector3(const float *arr) 
+		constexpr explicit vector3(const float *arr) 
 #ifdef _M_IX86
 			: vec(_mm_loadl_pi(_mm_movelh_ps(
 				_mm_load_ss(arr+2),
@@ -342,14 +342,14 @@ namespace miniRT {
 		operator F32vec4() const { return vec; }
 #endif // _M_IX86
 
-		vector3& operator=(const vector3& a) 
+		constexpr vector3& operator=(const vector3& a) 
 			{ vec = a.vec; return *this; }
 		vector3& operator=(const vector& a);
 #ifdef _M_IX86
-		vector3& operator=(const F32vec4 &a) 
+		constexpr vector3& operator=(const F32vec4 &a) 
 			{ vec = a; return *this; }
 #endif // _M_IX86
-		vector3& operator=(const __m128 &a) 
+		constexpr vector3& operator=(const __m128 &a) 
 			{ vec = a; return *this; }
 
 		// Accessing elements:
@@ -412,24 +412,24 @@ namespace miniRT {
 		// Constructors and convertions:
 
 		vector2() {}
-		vector2(const vector3& v) : vec(v.vec) {}
-		explicit vector2(const __m128 &m) : vec(m) {}
+		constexpr vector2(const vector3& v) : vec(v.vec) {}
+		constexpr explicit vector2(const __m128 &m) : vec(m) {}
 #ifdef _M_IX86
-		explicit vector2(const F32vec4 &m) : vec(m) {}
+		constexpr explicit vector2(const F32vec4 &m) : vec(m) {}
 #endif // _M_IX86
-		explicit vector2(const float a) 
+		constexpr explicit vector2(const float a) 
 #ifdef _M_IX86
 			: vec(F32vec4(a)) {}
 #else
 			: x(a), y(a) {}
 #endif // _M_IX86
-		vector2(const float x, const float y) 
+		constexpr vector2(const float x, const float y) 
 #ifdef _M_IX86
 			: vec(F32vec4(0.0f,0.0f,y,x)) {}
 #else
 			: x(x), y(y) {}
 #endif
-		vector2(const float *arr) 
+		constexpr vector2(const float *arr) 
 #ifdef _M_IX86
 			: vec(_mm_loadl_pi(_mm_movelh_ps(
 				_mm_load_ss(arr+2),
@@ -443,14 +443,14 @@ namespace miniRT {
 		operator F32vec4() const { return vec; }
 #endif // _M_IX86
 
-		vector2& operator = (const vector2& a) 
+		constexpr vector2& operator = (const vector2& a) 
 			{ vec = a.vec; return *this; }
-		vector2& operator = (const vector& a);
+		constexpr vector2& operator = (const vector& a);
 #ifdef _M_IX86
-		vector2& operator = (const F32vec4 &a) 
+		constexpr vector2& operator = (const F32vec4 &a) 
 			{ vec = a; return *this; }
 #endif // _M_IX86
-		vector2& operator = (const __m128 &a) 
+		constexpr vector2& operator = (const __m128 &a) 
 			{ vec = a; return *this; }
 
 		// Accessing elements:
@@ -1017,7 +1017,7 @@ namespace miniRT {
 
 	// ----------------------------------------------------------
 	//  Name:   vector * vector                          _   _
-	//  Desc:   Dot product of the two vectors. Returns [A]·[B].
+	//  Desc:   Dot product of the two vectors. Returns [A]ï¿½[B].
 	// ----------------------------------------------------------
 	inline float operator * (const vector& A, const vector& B) {
 #ifdef _M_IX86
@@ -1402,7 +1402,7 @@ namespace miniRT {
 
 	// ----------------------------------------------------------
 	//  Name:   vector3 * vector3                        _   _
-	//  Desc:   Dot product of the two vectors. Returns [A]·[B].
+	//  Desc:   Dot product of the two vectors. Returns [A]ï¿½[B].
 	// ----------------------------------------------------------
 	inline float operator * (
 		const vector3& A, const vector3& B) {

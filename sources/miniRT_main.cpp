@@ -17,7 +17,8 @@ vector3 delta;
 
 render* ren = 0;
 camera* cam = 0;
-teapot* ico = 0;
+teapot* tea = 0;
+icosahedron* ico = 0;
 
 void rtwin::key_up(int key, int x, int y, window* w) {
   switch (key) {
@@ -118,7 +119,7 @@ void rtwin::update(window* w) {
         // RENDER
   ren->clear_buffer();
   ren->begin();
-  ren->draw_indexed_triangles(0, 2255);
+  ren->draw_indexed_triangles(0, 2250);
   ren->present();
   ren->end();
   if ((w->get_tick() - first) > 1000) {
@@ -140,7 +141,8 @@ void rtwin::update(window* w) {
 
 int main(int ac, char** av) {
   light lt;
-  ico = new teapot();
+  ico = new icosahedron();
+  tea = new teapot();
   vector3 up(0.0f, 0.80f, 0.60f);
   vector3 pos(0.0f, 1.10f, -1.75f);
   vector3 ltpos(3.0f, 3.0f, -3.0f);

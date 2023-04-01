@@ -4,6 +4,7 @@ add_executable(minirt_test
   WIN32
     miniRT_cam.cpp
     miniRT_cam.h
+    miniRT_icosahedron.cpp
     miniRT_icosahedron.h
     miniRT_index_buffer.cpp
     miniRT_index_buffer.h
@@ -18,6 +19,7 @@ add_executable(minirt_test
     miniRT_render.cpp
     miniRT_render.h
     miniRT_screen_buffer.h
+    miniRT_teapot.cpp
     miniRT_teapot.h
     miniRT_triangle.cpp
     miniRT_triangle.h

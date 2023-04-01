@@ -14,10 +14,10 @@ namespace miniRT {
 
 class vertex {
  public:
-  vertex(const vector3& vp = vector3(0.0f, 0.0f, 0.0f),
-         const vector3& vn = vector3(0.0f, 0.0f, 0.0f),
-         const vector4& vc = vector4(1.0, 1.0, 1.0, 1.0),
-         const vector2& vt = vector2(0.0, 0.0))
+  constexpr vertex(const vector3& vp = vector3(0.0f, 0.0f, 0.0f),
+                   const vector3& vn = vector3(0.0f, 0.0f, 0.0f),
+                   const vector4& vc = vector4(1.0, 1.0, 1.0, 1.0),
+                   const vector2& vt = vector2(0.0, 0.0))
       : pos(vp), norm(vn), rgba(vc), uv(vt) {}
   vector3 pos;
   vector3 norm;

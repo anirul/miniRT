@@ -5,6 +5,9 @@
 // e-mail	: angel@calodox.org
 /////////////////////////////////////////////////////////////////////
 
+#ifndef __MINIRT_INDEX_BUFFER_DEFINED__
+#define __MINIRT_INDEX_BUFFER_DEFINED__
+
 namespace miniRT {
 
 class index_buffer {
@@ -20,3 +23,5 @@ class index_buffer {
 };
 
 }  // end namespace miniRT
+
+#endif // __MINIRT_INDEX_BUFFER_DEFINED__
