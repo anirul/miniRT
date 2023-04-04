@@ -18,16 +18,16 @@ class teapot {
  public:
   teapot();
   ~teapot();
-  size_t get_ib_size() const { return nbindex; }
-  index_buffer* get_ib() { return pib; }
-  size_t get_vb_size() const { return nbvertex; }
-  vertex_buffer* get_vb() { return pvb; }
+  size_t get_ib_size() const { return nbindex_; }
+  index_buffer* get_ib() { return pib_; }
+  size_t get_vb_size() const { return nbvertex_; }
+  vertex_buffer* get_vb() { return pvb_; }
 
  private:
-  static constexpr size_t nbindex = 1178;
-  static constexpr size_t nbvertex = 2256 * 3;
-  vertex_buffer* pvb;
-  index_buffer* pib;
+  static constexpr size_t nbindex_ = 1178;
+  static constexpr size_t nbvertex_ = 2256 * 3;
+  vertex_buffer* pvb_;
+  index_buffer* pib_;
 };
 
 }  // end namespace miniRT

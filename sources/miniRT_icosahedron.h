@@ -18,16 +18,16 @@ class icosahedron {
  public:
   icosahedron();
   ~icosahedron();
-  index_buffer* get_ib() { return pib; }
-  size_t get_ib_size() const { return nbindex; }
-  vertex_buffer* get_vb() { return pvb; }
-  size_t get_vb_size() const { return nbvertex; }
+  index_buffer* get_ib() { return pib_; }
+  size_t get_ib_size() const { return nbindex_; }
+  vertex_buffer* get_vb() { return pvb_; }
+  size_t get_vb_size() const { return nbvertex_; }
 
  private:
-  static constexpr size_t nbvertex = 16;
-  static constexpr size_t nbindex = 20 * 3 + 6;
-  vertex_buffer* pvb;
-  index_buffer* pib;
+  static constexpr size_t nbvertex_ = 16;
+  static constexpr size_t nbindex_ = 20 * 3 + 6;
+  vertex_buffer* pvb_ = nullptr;
+  index_buffer* pib_ = nullptr;
 };
 
 }  // end namespace miniRT

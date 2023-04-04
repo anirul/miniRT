@@ -119,7 +119,7 @@ void rtwin::update(window* w) {
         // RENDER
   ren->clear_buffer();
   ren->begin();
-  ren->draw_indexed_triangles(0, 2250);
+  ren->draw_indexed_triangles(0, 20);
   ren->present();
   ren->end();
   if ((w->get_tick() - first) > 1000) {
