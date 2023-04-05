@@ -29,17 +29,17 @@ class render {
   int dx, dy;
   int maxobj;
   bool *sldx, *sldy;
-  vector4* bound_tri;
+  glm::vec4* bound_tri;
   triangle* tri;
   light* pl;
   int lcount;
   screen_buffer<float>* pzsb;
   screen_buffer<unsigned int>* pisb;
-  vector3 top_left;
-  vector3 right_step;
-  vector3 up_step;
-  unsigned int phong(const vector4& tuvi, const vector3& dir, int i);
-  unsigned int clampRGBA(const vector4& v);
+  glm::vec3 top_left;
+  glm::vec3 right_step;
+  glm::vec3 up_step;
+  unsigned int phong(glm::vec4 tuvi, glm::vec3 dir, int i);
+  unsigned int clampRGBA(glm::vec4 v);
 
  public:
   // create the scan line structure

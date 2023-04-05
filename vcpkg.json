@@ -5,6 +5,7 @@
   "description": "Mini real-time raytracer",
   "dependencies": [
     "glew",
+    "glm",
     "opengl",
     "sdl2"
   ]

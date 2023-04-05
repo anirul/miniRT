@@ -13,7 +13,6 @@
 #include "miniRT_cam.h"
 #include "miniRT_index_buffer.h"
 #include "miniRT_light.h"
-#include "miniRT_math.h"
 #include "miniRT_new.h"
 #include "miniRT_render.h"
 #include "miniRT_screen_buffer.h"
@@ -21,11 +20,11 @@
 #include "miniRT_vertex.h"
 #include "miniRT_vertex_buffer.h"
 #include "miniRT_win.h"
-// #include "miniRT_icosahedron.h"
 #include <memory.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "miniRT_icosahedron.h"
 #include "miniRT_teapot.h"
 
 #ifdef __cplusplus

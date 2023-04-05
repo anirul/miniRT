@@ -8,14 +8,15 @@
 #ifndef __MINIRT_VERTEXBUFFER_HEADER__
 #define __MINIRT_VERTEXBUFFER_HEADER__
 
-#include "miniRT_math.h"
+#include <glm/glm.hpp>
+
 #include "miniRT_vertex.h"
 
 namespace miniRT {
 
 class vertex_buffer {
   // optimized storage for vector
-  __m128* popt;
+  glm::vec3* popt;
   int nb;
 
  public:
@@ -26,10 +27,10 @@ class vertex_buffer {
   void set_optimized(const vertex* p);
   // get the values
   int size() const { return nb; }
-  __m128& get_pos(int i);
-  __m128& get_normal(int i);
-  __m128& get_color(int i);
-  __m128& get_UV(int i);
+  glm::vec3 get_pos(int i);
+  glm::vec3 get_normal(int i);
+  glm::vec3 get_color(int i);
+  glm::vec3 get_UV(int i);
 };
 
 }  // end of namespace miniRT

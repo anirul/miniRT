@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # External packages
 find_package(GLEW CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 
 add_subdirectory(sources)

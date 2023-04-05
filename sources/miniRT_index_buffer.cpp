@@ -8,8 +8,8 @@
 #include "miniRT_index_buffer.h"
 
 #include <assert.h>
+#include <glm/glm.hpp>
 
-#include "miniRT_math.h"
 #include "miniRT_new.h"
 
 namespace miniRT {

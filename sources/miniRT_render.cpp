@@ -9,10 +9,13 @@
 
 #include <assert.h>
 
+#include <cmath>
+#include <glm/glm.hpp>
+#include <limits>
+
 #include "miniRT_cam.h"
 #include "miniRT_index_buffer.h"
 #include "miniRT_light.h"
-#include "miniRT_math.h"
 #include "miniRT_new.h"
 #include "miniRT_screen_buffer.h"
 #include "miniRT_triangle.h"
@@ -32,6 +35,11 @@
 #endif
 //#define WITHOUT_SHADOW 1
 
+// Remove conflicting macro.
+#ifdef max
+#undef max
+#endif
+
 namespace miniRT {
 
 render::render(window* w, int x, int y, int obj) {
@@ -40,7 +48,7 @@ render::render(window* w, int x, int y, int obj) {
   assert(y);
   assert(obj);
 
-  bound_tri = new vector4[obj];
+  bound_tri = new glm::vec4[obj];
   pzsb = new screen_buffer<float>(x, y);
   pisb = new screen_buffer<unsigned int>(x, y);
   pib = 0;
@@ -85,17 +93,17 @@ bool render::begin() {
   right_step = cam.get_right() * height * (1.0f / (float)dy);
   up_step = cam.get_up() * height * (1.0f / (float)dy);
 
-  vector3 start;
-  vector3 pos = cam.get_pos();
+  glm::vec3 start;
+  glm::vec3 pos = cam.get_pos();
   int nb_tri = pib->size() / 3;
   for (int i = 0, j = 0; i < nb_tri; ++i, j += 3) {
     bool found = false;
-    bound_tri[i] = vector4(-1.0f);
+    bound_tri[i] = glm::vec4(-1.0f);
     start = cam.get_to() - cam.get_right() * (width * 0.5f);
     for (int x = 0; x < dx; ++x) {
-      vector3 x_scan_line = start + right_step * (float)x;
-      vector3 norm = x_scan_line % cam.get_up();
-      norm.Normalize();
+      glm::vec3 x_scan_line = start + right_step * (float)x;
+      glm::vec3 norm = glm::cross(x_scan_line, cam.get_up());
+      norm = glm::normalize(norm);
       if (tri->intersect_plane(pib->get(j), pib->get(j + 1), pib->get(j + 2),
                                pos, norm)) {
         if (!found) {
@@ -118,9 +126,9 @@ bool render::begin() {
     bool found = false;
     start = cam.get_to() + cam.get_up() * (height * 0.5f);
     for (int y = 0; y < dy; ++y) {
-      vector3 y_scan_line = start - up_step * (float)y;
-      vector3 norm = y_scan_line % cam.get_right();
-      norm.Normalize();
+      glm::vec3 y_scan_line = start - up_step * (float)y;
+      glm::vec3 norm = glm::cross(y_scan_line, cam.get_right());
+      norm = glm::normalize(norm);
       if (tri->intersect_plane(pib->get(j), pib->get(j + 1), pib->get(j + 2),
                                pos, norm)) {
         if (!found) {
@@ -174,26 +182,26 @@ bool render::draw_indexed_triangles(int first, int last) {
   assert(last < nbobj);
   assert(first <= last);
 
-  const vector4 nullvec = vector4(-1.0);
-  vector3 pos = cam.get_pos();
-  vector4 tuvi;
-  vector4 pvd;
+  const glm::vec4 nullvec = glm::vec4(-1.0);
+  glm::vec3 pos = cam.get_pos();
+  glm::vec4 tuvi;
+  glm::vec4 pvd;
 
   for (int obji = first; obji <= last; ++obji) {
-    vector4 bound = bound_tri[obji];
+    glm::vec4 bound = bound_tri[obji];
     for (int y = (int)bound.y; y < (int)bound.w; ++y) {
-      vector3 yscanline = top_left - up_step * (float)y;
-      vector3 dir;
+      glm::vec3 yscanline = top_left - up_step * (float)y;
+      glm::vec3 dir;
       yscanline += right_step * bound_tri[obji].x;
       bool found = true;
       int lastx = (int)bound.x;
       for (int x = lastx; x < (int)bound.z; ++x) {
         dir = yscanline;
-        dir.Normalize();
+        dir = glm::normalize(dir);
         int index = obji * 3;
         tri->intersect_det(pib->get(index), pib->get(index + 1),
                            pib->get(index + 2), pos, dir, &pvd);
-        if (pvd.w > minirt_epsilon) {
+        if (pvd.w > std::numeric_limits<float>::epsilon()) {
           if (tri->intersect_barycentric(pib->get(index), pib->get(index + 1),
                                          pib->get(index + 2), pvd, pos, dir,
                                          &tuvi)) {
@@ -223,7 +231,7 @@ void render::clear_buffer() {
   for (int i = 0; i < lcount; ++i) {
     back += clampRGBA(pl[i].ambiant());
   }
-  pzsb->clear(minirt_huge);
+  pzsb->clear(std::numeric_limits<float>::max());
   pisb->clear(back);
 }
 
@@ -250,7 +258,7 @@ int render::add_light(const light& l) {
   return ++lcount;
 }
 
-unsigned int render::clampRGBA(const vector4& v) {
+unsigned int render::clampRGBA(glm::vec4 v) {
   int ir = (int)(v.x * 256.0f);
   if (ir < 0) ir = 0;
   if (ir > 255) ir = 255;
@@ -270,29 +278,29 @@ unsigned int render::clampRGBA(const vector4& v) {
   return (ib << 16) + (ig << 8) + ir;
 }
 
-unsigned int render::phong(const vector4& tuvi, const vector3& dir, int i) {
+unsigned int render::phong(glm::vec4 tuvi, glm::vec3 dir, int i) {
   assert(tri);
   assert(pib);
   assert(i >= 0);
   assert(i < (pib->size() / 3));
   assert(lcount > 0);
 
-  vector4 col(0.0f, 0.0f, 0.0f, 0.0f);
+  glm::vec4 col(0.0f, 0.0f, 0.0f, 0.0f);
   int v0, v1, v2;
   v0 = pib->get(i * 3);
   v1 = pib->get(i * 3 + 1);
   v2 = pib->get(i * 3 + 2);
-  vector3 normal = tri->intersect_normal(v0, v1, v2, tuvi);
-  vector3 hitpoint = cam.get_pos() + dir * tuvi.x;
-  vector4 pvd;
+  glm::vec3 normal = tri->intersect_normal(v0, v1, v2, tuvi);
+  glm::vec3 hitpoint = cam.get_pos() + dir * tuvi.x;
 
   // search light
   for (int j = 0; j < lcount; ++j) {
-    vector3 incoming_light_normal = (pl[j].position() - hitpoint).Normalize();
+    glm::vec3 incoming_light_normal =
+        glm::normalize(pl[j].position() - hitpoint);
     bool visible = true;
-    float n_cross_inlt = normal * incoming_light_normal;
+    float n_cross_inlt = glm::dot(normal, incoming_light_normal);
     // if the angle is too sharp or behind target
-    if (n_cross_inlt < minirt_epsilon) visible = false;
+    if (n_cross_inlt < std::numeric_limits<float>::epsilon()) visible = false;
 #ifndef WITHOUT_SHADOW
     if (visible) {
       int last_occulted = pl[j].last_hit();
@@ -301,11 +309,12 @@ unsigned int render::phong(const vector4& tuvi, const vector3& dir, int i) {
         u0 = pib->get(last_occulted * 3);
         u1 = pib->get(last_occulted * 3 + 1);
         u2 = pib->get(last_occulted * 3 + 2);
+        // CHECKME(anirul): I don't get why there is a sqrt here.
         if (tri->shadow_hit(u0, u1, u2, hitpoint, incoming_light_normal,
-                            minirt_epsilon,
-                            sqrt((hitpoint - pl[j].position()) *
-                                 (hitpoint - pl[j].position())) -
-                                minirt_epsilon)) {
+                            std::numeric_limits<float>::epsilon(),
+                            std::sqrt(glm::dot((hitpoint - pl[j].position()),
+                                               (hitpoint - pl[j].position())) -
+                                      std::numeric_limits<float>::epsilon()))) {
           visible = false;
         }
       }
@@ -316,9 +325,8 @@ unsigned int render::phong(const vector4& tuvi, const vector3& dir, int i) {
             u0 = pib->get(k * 3);
             u1 = pib->get(k * 3 + 1);
             u2 = pib->get(k * 3 + 2);
-            vector4 pvd;
             if (tri->shadow_hit(u0, u1, u2, hitpoint, incoming_light_normal,
-                                minirt_epsilon,
+                                std::numeric_limits<float>::epsilon(),
                                 1000.0f))  // TODO (faster than sqrt)
             {
               visible = false;
@@ -335,16 +343,16 @@ unsigned int render::phong(const vector4& tuvi, const vector3& dir, int i) {
       if (n_cross_inlt > 0.90f) {
         col += pl[j].ambiant();
         col += pl[j].diffuse() * n_cross_inlt;
-        col |= tri->intersect_col(v0, v1, v2, tuvi);
+        col *= tri->intersect_col(v0, v1, v2, tuvi);
         col += ((n_cross_inlt - 0.90f) * 10.0f) * pl[j].specular();
       } else {
         col += pl[j].ambiant();
         col += pl[j].diffuse() * n_cross_inlt;
-        col |= tri->intersect_col(v0, v1, v2, tuvi);
+        col *= tri->intersect_col(v0, v1, v2, tuvi);
       }
     } else {
       col += pl[j].ambiant();
-      col |= tri->intersect_col(v0, v1, v2, tuvi);
+      col *= tri->intersect_col(v0, v1, v2, tuvi);
     }
   }
   return clampRGBA(col);

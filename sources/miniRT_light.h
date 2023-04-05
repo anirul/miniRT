@@ -11,33 +11,33 @@
 namespace miniRT {
 
 class light {
-  vector4 spec;
-  vector4 diff;
-  vector4 amb;
-  vector3 pos;
+  glm::vec4 spec;
+  glm::vec4 diff;
+  glm::vec4 amb;
+  glm::vec3 pos;
   int lh;
 
  public:
   light()
-      : pos(vector3(0.0f, 0.0f, 0.0f)),
-        spec(vector4(1.0f, 1.0f, 1.0f, 0.0f)),
-        diff(vector4(0.5f, 0.5f, 0.5f, 0.0f)),
-        amb(vector4(0.2f, 0.2f, 0.2f, 0.0f)),
+      : pos(glm::vec3(0.0f, 0.0f, 0.0f)),
+        spec(glm::vec4(1.0f, 1.0f, 1.0f, 0.0f)),
+        diff(glm::vec4(0.5f, 0.5f, 0.5f, 0.0f)),
+        amb(glm::vec4(0.2f, 0.2f, 0.2f, 0.0f)),
         lh(-1) {}
-  light(const vector3& p,  // position
-        const vector4& s,  // specular
-        const vector4& d,  // diffuse
-        const vector4& a)  // ambiant
+  light(glm::vec3 p,  // position
+        glm::vec4 s,  // specular
+        glm::vec4 d,  // diffuse
+        glm::vec4 a)  // ambiant
       : pos(p), spec(s), diff(d), amb(a), lh(-1) {}
-  const int last_hit() const { return lh; }
-  const vector4& ambiant() const { return amb; }
-  const vector4& diffuse() const { return diff; }
-  const vector4& specular() const { return spec; }
-  const vector3& position() const { return pos; }
-  vector4& ambiant() { return amb; }
-  vector4& diffuse() { return diff; }
-  vector4& specular() { return spec; }
-  vector3& position() { return pos; }
+  int last_hit() const { return lh; }
+  glm::vec4 ambiant() const { return amb; }
+  glm::vec4 diffuse() const { return diff; }
+  glm::vec4 specular() const { return spec; }
+  glm::vec3 position() const { return pos; }
+  glm::vec4 ambiant() { return amb; }
+  glm::vec4 diffuse() { return diff; }
+  glm::vec4 specular() { return spec; }
+  glm::vec3 position() { return pos; }
   int& last_hit() { return lh; }
 };
 

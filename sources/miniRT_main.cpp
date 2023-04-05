@@ -7,17 +7,20 @@
 
 #include "miniRT_main.h"
 
+#include <glm/gtx/transform.hpp>
+
 using namespace miniRT;
 
 static int dx = 640;
 static int dy = 480;
 const float MOVE_SPEED = 0.05f;
 const float ROTATE_FACT = 0.02f;
-vector3 delta;
+glm::vec3 delta;
 
 render* ren = 0;
 camera* cam = 0;
-teapot* ico = 0;
+teapot* tea = 0;
+icosahedron* ico = 0;
 
 void rtwin::key_up(int key, int x, int y, window* w) {
   switch (key) {
@@ -84,25 +87,21 @@ void rtwin::motion(int x, int y, window* w) {
   if (w->is_mouse_captured()) {
     // rotation
     camera old = *cam;
-    cam->set_right(
-        vector3((old.get_right() * AA2M3(old.get_up(), ROTATE_FACT * -x)).vec));
-    cam->set_to(
-        vector3((old.get_to() * AA2M3(old.get_up(), ROTATE_FACT * -x)).vec));
-    cam->set_up(
-        vector3((old.get_up() * AA2M3(old.get_up(), ROTATE_FACT * -x)).vec));
-    cam->set_right(cam->get_right().Normalize());
-    cam->set_to(cam->get_to().Normalize());
-    cam->set_right(cam->get_right().Normalize());
+    glm::mat3 mat_rot_up = glm::rotate(ROTATE_FACT * -x, old.get_up());
+    cam->set_right(old.get_right() * mat_rot_up);
+    cam->set_to(old.get_to() * mat_rot_up);
+    cam->set_up(old.get_up() * mat_rot_up);
+    cam->set_right(glm::normalize(cam->get_right()));
+    cam->set_to(glm::normalize(cam->get_to()));
+    cam->set_right(glm::normalize(cam->get_right()));
     old = *cam;
-    cam->set_right(vector3(
-        (old.get_right() * AA2M3(old.get_right(), ROTATE_FACT * -y)).vec));
-    cam->set_to(
-        vector3((old.get_to() * AA2M3(old.get_right(), ROTATE_FACT * -y)).vec));
-    cam->set_up(
-        vector3((old.get_up() * AA2M3(old.get_right(), ROTATE_FACT * -y)).vec));
-    cam->set_right(cam->get_right().Normalize());
-    cam->set_to(cam->get_to().Normalize());
-    cam->set_right(cam->get_right().Normalize());
+    glm::mat3 mat_rot_right = glm::rotate(ROTATE_FACT * -y, old.get_right());
+    cam->set_right(old.get_right() * mat_rot_right);
+    cam->set_to(old.get_to() * mat_rot_right);
+    cam->set_up(old.get_up() * mat_rot_right);
+    cam->set_right(glm::normalize(cam->get_right()));
+    cam->set_to(glm::normalize(cam->get_to()));
+    cam->set_right(glm::normalize(cam->get_right()));
     cam->fix_perp();
   }
   ren->set_camera(*cam);
@@ -118,7 +117,7 @@ void rtwin::update(window* w) {
         // RENDER
   ren->clear_buffer();
   ren->begin();
-  ren->draw_indexed_triangles(0, 2255);
+  ren->draw_indexed_triangles(0, 20);
   ren->present();
   ren->end();
   if ((w->get_tick() - first) > 1000) {
@@ -131,7 +130,7 @@ void rtwin::update(window* w) {
   }
   char temp[512];
   memset(temp, 0, 512);
-  sprintf(temp, "miniRT : FPS %f : ", (float)fps);
+  sprintf_s(temp, 128, "miniRT : FPS %f : ", (float)fps);
   w->set_title(temp, "miniRT");
   cam->set_pos(cam->get_pos() + (cam->get_right() * delta[0]));
   cam->set_pos(cam->get_pos() + (cam->get_to() * delta[2]));
@@ -140,11 +139,12 @@ void rtwin::update(window* w) {
 
 int main(int ac, char** av) {
   light lt;
-  ico = new teapot();
-  vector3 up(0.0f, 0.80f, 0.60f);
-  vector3 pos(0.0f, 1.10f, -1.75f);
-  vector3 ltpos(3.0f, 3.0f, -3.0f);
-  vector3 to(0.0f, -0.60f, 0.80f);
+  ico = new icosahedron();
+  tea = new teapot();
+  glm::vec3 up(0.0f, 0.80f, 0.60f);
+  glm::vec3 pos(0.0f, 1.10f, -1.75f);
+  glm::vec3 ltpos(3.0f, 3.0f, -3.0f);
+  glm::vec3 to(0.0f, -0.60f, 0.80f);
   lt.position() = ltpos;
   cam = new camera(up, to, pos);
   rtwin* main_win = new rtwin();
